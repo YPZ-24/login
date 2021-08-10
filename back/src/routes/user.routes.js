@@ -1,6 +1,10 @@
 const {Router} = require('express') 
 const { saveUser, getUsers } = require('../controllers/user')
 const router = Router()
+const yup = require('yup')
+const { createUserSchema } = require('../utils/schemas/user')
+const validate = require('../middleware/validate')
+const { createUserValidation } = require('../validations/userV')
 
 router.get('/', (req, res) => {
 
@@ -15,7 +19,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/', validate(createUserValidation), (req, res) => {
     const {email, password} = req.body
 
     saveUser(email, password)
